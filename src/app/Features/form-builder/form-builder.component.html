@@ -1,0 +1,58 @@
+<div class="main-layer">
+    <div class="form-container">
+        <h2 class="title">{{ formConfig.form.title }}</h2>
+        <form [formGroup]="form" (ngSubmit)="onSubmit()">
+        @for(field of formConfig.form.fields; track field){
+          <div>
+            @if (field.type === 'TEXT') {
+            <mat-form-field appearance="outline" class="example-full-width"
+                #tooltip="matTooltip"
+                matTooltipPosition="right"
+                [matTooltip]="field.description"
+                matTooltipHideDelay="0"
+            >
+                <mat-label>{{ field.title }}</mat-label>
+                <input matInput
+                [type]="field.type.toLowerCase()"
+                [formControlName]="field.name"
+                >
+                @if (form.controls[field.name].invalid && form.controls[field.name].touched) {
+                  <mat-error class="error">{{ field.errorMessage }}</mat-error>
+                }
+              </mat-form-field>
+            }
+            @if (field.type === 'NEW_PASSWORD') {
+                <mat-form-field appearance="outline" class="example-full-width"
+                    #tooltip="matTooltip"
+                    matTooltipPosition="right"
+                    [matTooltip]="field.description"
+                    matTooltipHideDelay="0"
+                >
+                    <mat-label>{{ field.title }}</mat-label>
+                    <input matInput
+                    [type]="hide ? 'password' : 'text'"
+                    [formControlName]="field.name"
+                    >
+                    <mat-icon matSuffix (click)="hide = !hide">{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
+                    
+                    @if (form.controls[field.name].invalid && form.controls[field.name].touched) {
+                      <mat-error class="error">{{ field.errorMessage }}</mat-error>
+                    }
+                    @if (field.info) {
+                        <mat-icon
+                        matSuffix
+                        #tooltip="matTooltip"
+                        matTooltipPosition="right"
+                        [matTooltip]="field.info"
+                        matTooltipHideDelay="0"
+                        >info</mat-icon>
+                      }
+                  </mat-form-field>
+            }
+          </div>
+        }
+            <button [disabled]="!form.valid" class="submit-btn" type="submit" >{{ formConfig.form.submitLabel }}</button>
+        </form>
+      </div>
+    
+</div>
